@@ -1,0 +1,13 @@
+tingeso\tingesoProyect\services\LoanSolicitudeService.class
+tingeso\tingesoProyect\entities\LoanSolicitudeEntity.class
+tingeso\tingesoProyect\TingesoProyectApplication.class
+tingeso\tingesoProyect\repositories\UserRepository.class
+tingeso\tingesoProyect\controllers\UserController.class
+tingeso\tingesoProyect\services\MortgageLoanService.class
+tingeso\tingesoProyect\entities\MortgageLoanEntity.class
+tingeso\tingesoProyect\controllers\LoanSolicitudeController.class
+tingeso\tingesoProyect\services\UserService.class
+tingeso\tingesoProyect\entities\UserEntity.class
+tingeso\tingesoProyect\repositories\LoanSolicitudeRepository.class
+tingeso\tingesoProyect\repositories\MortgageLoanRepository.class
+tingeso\tingesoProyect\controllers\MortgageLoanController.class

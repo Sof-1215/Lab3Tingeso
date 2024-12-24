@@ -1,0 +1,26 @@
+pipeline{
+    agent any
+    stages{
+        stage("Build Frontend"){
+            steps{
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Sof-1215/Lab1Tingeso']])
+                dir("TingesoFrontend"){
+                    bat "npm install"
+                    bat "npm run build"
+                }
+            }
+        }
+        stage("Build and Push Docker Image"){
+            steps{
+                dir("TingesoFrontend"){
+                    script{
+                         withDockerRegistry(url: 'https://index.docker.io/v1/', credentialsId: 'jenkins-token') {
+                            bat "docker build --no-cache -t sof1215/tingesofrontend ."
+                            bat "docker push sof1215/tingesofrontend"
+                        }
+                    }                    
+                }
+            }
+        }
+    }
+}
