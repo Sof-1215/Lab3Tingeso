@@ -9,6 +9,7 @@ import tingeso.tingesoProyect.entities.UserEntity;
 import tingeso.tingesoProyect.repositories.LoanSolicitudeRepository;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class LoanSolicitudeService {
@@ -53,4 +54,7 @@ public class LoanSolicitudeService {
         return loanSolicitudeRepository.save(solicitudeNew);
     }
 
+    public List<LoanSolicitudeEntity> getLoanSolicitude(String rutUser) {
+        return loanSolicitudeRepository.findByRutUser(rutUser);
+    }
 }

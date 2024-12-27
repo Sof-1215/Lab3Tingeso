@@ -9,6 +9,7 @@ import tingeso.tingesoProyect.entities.LoanSolicitudeEntity;
 import tingeso.tingesoProyect.services.LoanSolicitudeService;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/loansolicitude")
@@ -38,6 +39,12 @@ public class LoanSolicitudeController {
         LoanSolicitudeEntity solicitude = loanSolicitudeService.getSolicitudeById(loanSolicitudeId);
         solicitude.setState(state);
 
+        return ResponseEntity.ok(solicitude);
+    }
+
+    @GetMapping("/solicitude/{rutUser}")
+    public ResponseEntity<List<LoanSolicitudeEntity>> getSolicitude (@PathVariable("rutUser") String rutUser) {
+        List<LoanSolicitudeEntity> solicitude = loanSolicitudeService.getLoanSolicitude(rutUser);
         return ResponseEntity.ok(solicitude);
     }
 }
