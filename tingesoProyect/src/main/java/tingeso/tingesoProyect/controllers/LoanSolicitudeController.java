@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import tingeso.tingesoProyect.entities.LoanSolicitudeEntity;
 import tingeso.tingesoProyect.services.LoanSolicitudeService;
 
 import java.io.IOException;
@@ -30,5 +31,13 @@ public class LoanSolicitudeController {
         loanSolicitudeService.create(rutUser, idMortgageLoan, proofOfIncome, appraisalCertificate, creditHistory,
                 houseDeed, businessFinancialStatus, businessPlan, remodelBudget);
         return ResponseEntity.status(HttpStatus.OK).body("Uploaded files");
+    }
+
+    @PostMapping("/updatestate/{loanSolicitudeId}")
+    public ResponseEntity<LoanSolicitudeEntity> updateState (@PathVariable long loanSolicitudeId, @RequestParam Integer state) {
+        LoanSolicitudeEntity solicitude = loanSolicitudeService.getSolicitudeById(loanSolicitudeId);
+        solicitude.setState(state);
+
+        return ResponseEntity.ok(solicitude);
     }
 }

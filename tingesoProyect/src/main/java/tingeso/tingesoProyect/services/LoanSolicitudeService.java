@@ -1,9 +1,11 @@
 package tingeso.tingesoProyect.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import tingeso.tingesoProyect.entities.LoanSolicitudeEntity;
+import tingeso.tingesoProyect.entities.UserEntity;
 import tingeso.tingesoProyect.repositories.LoanSolicitudeRepository;
 
 import java.io.IOException;
@@ -12,6 +14,10 @@ import java.io.IOException;
 public class LoanSolicitudeService {
     @Autowired
     LoanSolicitudeRepository loanSolicitudeRepository;
+
+    public LoanSolicitudeEntity getSolicitudeById(Long id) {
+        return loanSolicitudeRepository.findById(id).get();
+    }
 
     public LoanSolicitudeEntity create(String rutUser, Long idMortgageLoan,
                                        MultipartFile proofOfIncome, MultipartFile appraisalCertificate,
