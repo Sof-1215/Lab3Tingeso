@@ -27,6 +27,17 @@ const store = (formData) => {
       throw error;
     }
   };
+
+  const getAll = async () => {
+    try {
+      const response = await httpClient.get(`/api/v1/loansolicitude/getall`);
+      return response.data; // Asegúrate de devolver los datos procesados
+    } catch (error) {
+      console.error("Error fetching loan solicitude:", error);
+      throw error; // Propaga el error para manejarlo en el componente
+    }
+  };
+  
   
   const updateLoanSolicitude = async (id, solicitudeData) => {
     try {
@@ -37,4 +48,4 @@ const store = (formData) => {
     }
   };
   
-export default { store, getLoanSolicitudes, getLoanSolicitudeById, updateLoanSolicitude };
+export default { store, getLoanSolicitudes, getLoanSolicitudeById, getAll, updateLoanSolicitude };

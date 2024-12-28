@@ -8,6 +8,7 @@ import Simulator from './components/Simulator';
 import Solicitude from './components/Solicitude';
 import ListSolicitude from './components/ListSolicitude';
 import EditSolicitude from './components/EditSolicitude';
+import AllSolicitudes from './components/AllSolicitudes';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
               <Route path="/solicitude" element={<Solicitude />} />
               <Route path="loan-solicitudes" element={<ListSolicitude />} />
               <Route path="edit-solicitude/:id" element={<EditSolicitude />} />
+              <Route path="get-solicitudes" element={<AllSolicitudes />} />
             </Routes>
           </div>
       </Router>
