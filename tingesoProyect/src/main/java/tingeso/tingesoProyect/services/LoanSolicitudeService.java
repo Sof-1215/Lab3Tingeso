@@ -16,6 +16,10 @@ public class LoanSolicitudeService {
     @Autowired
     LoanSolicitudeRepository loanSolicitudeRepository;
 
+    public List<LoanSolicitudeEntity> getAllLoanSolicitudes() {
+        return loanSolicitudeRepository.findAll();
+    }
+
     public LoanSolicitudeEntity getSolicitudeById(Long id) {
         return loanSolicitudeRepository.findById(id).get();
     }
@@ -56,5 +60,9 @@ public class LoanSolicitudeService {
 
     public List<LoanSolicitudeEntity> getLoanSolicitude(String rutUser) {
         return loanSolicitudeRepository.findByRutUser(rutUser);
+    }
+
+    public LoanSolicitudeEntity update(Long id, LoanSolicitudeEntity loanSolicitude) {
+        return loanSolicitudeRepository.save(loanSolicitude);
     }
 }

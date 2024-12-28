@@ -2,43 +2,40 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Verify authentication status
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if the user is authenticated using localStorage
     const checkAuthStatus = () => {
       const user = localStorage.getItem('user');
-      setIsAuthenticated(!!user); // Update the authentication status based on the user's existence
+      setIsAuthenticated(!!user);
     };
-
     checkAuthStatus();
   }, []);
 
-  // Redirect to the registration page
-  const goToRegister = () => {
-    navigate('/register');
+  const goToListSolicitudes = () => {
+    navigate('/loan-solicitudes');
   };
 
-  // Redirect to the login page
-  const goToLogin = () => {
-    navigate('/login');
-  };
-
-  // Redirect to the simulator page
   const goToSimulator = () => {
     navigate('/simulator');
   };
 
-  // Redirect to the solicitude page
   const goToSolicitude = () => {
     navigate('/solicitude');
   };
 
-  // Logout function
+  const goToRegister = () => {
+    navigate('/register');
+  };
+
+  const goToLogin = () => {
+    navigate('/login');
+  };
+
   const handleLogout = () => {
-    localStorage.removeItem('user'); // Remove the user from localStorage
-    setIsAuthenticated(false); // Update the authentication status
+    localStorage.removeItem('user');
+    setIsAuthenticated(false);
   };
 
   return (
@@ -50,12 +47,13 @@ const Home = () => {
           <p>You are logged in! Enjoy your experience.</p>
           <button className='button-style' onClick={goToSolicitude}>Make a Solicitude</button>
           <button className='button-style' onClick={goToSimulator}>Simulate Loan</button>
+          <button className='button-style' onClick={goToListSolicitudes}>Show Loan Solicitudes</button>
           <button className='button-style' onClick={handleLogout}>Logout</button>
         </div>
       ) : (
         <div>
           <p>This is the main page, you can carry out credit simulations and request different types of loans depending on what you need.</p>
-          <p>Log in and explore our diffrent offers and benefits for our clients</p>
+          <p>Log in and explore our different offers and benefits for our clients</p>
           <button className='button-style' onClick={goToLogin}>Login</button>
           <p>Don't have an account?</p>
           <p>We want to help you and are waiting for you to join us.</p>

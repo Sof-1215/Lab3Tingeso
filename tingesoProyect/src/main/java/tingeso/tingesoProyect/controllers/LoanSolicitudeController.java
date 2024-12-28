@@ -17,6 +17,17 @@ import java.util.List;
 public class LoanSolicitudeController {
     @Autowired
     LoanSolicitudeService loanSolicitudeService;
+    @GetMapping("/getall")
+    public ResponseEntity<List<LoanSolicitudeEntity>> getAll() {
+        List<LoanSolicitudeEntity> solicitudes = loanSolicitudeService.getAllLoanSolicitudes();
+        return ResponseEntity.ok(solicitudes);
+    }
+
+    @GetMapping("/getsolicitude/{id}")
+    public ResponseEntity<LoanSolicitudeEntity> getLoanSolicitudeById(@PathVariable Long id) {
+        LoanSolicitudeEntity solicitude = loanSolicitudeService.getSolicitudeById(id);
+        return ResponseEntity.ok(solicitude);
+    }
 
     @PostMapping("/store")
     public ResponseEntity<String> saveSolicitude (@RequestParam(value = "rutUser") String rutUser,
@@ -43,8 +54,14 @@ public class LoanSolicitudeController {
     }
 
     @GetMapping("/solicitude/{rutUser}")
-    public ResponseEntity<List<LoanSolicitudeEntity>> getSolicitude (@PathVariable("rutUser") String rutUser) {
+    public ResponseEntity<List<LoanSolicitudeEntity>> getSolicitudes (@PathVariable("rutUser") String rutUser) {
         List<LoanSolicitudeEntity> solicitude = loanSolicitudeService.getLoanSolicitude(rutUser);
         return ResponseEntity.ok(solicitude);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<LoanSolicitudeEntity> updateSolicitude (@PathVariable Long id, @RequestBody LoanSolicitudeEntity solicitude) {
+        LoanSolicitudeEntity newSolicitude = loanSolicitudeService.update(id, solicitude);
+        return ResponseEntity.ok(newSolicitude);
     }
 }
