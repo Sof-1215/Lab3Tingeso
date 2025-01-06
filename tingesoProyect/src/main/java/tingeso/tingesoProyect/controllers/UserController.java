@@ -28,10 +28,10 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping("login/{rut}")
-    public ResponseEntity<UserEntity> login(@PathVariable String rut) {
+    @PostMapping("login/{rut}/{password}")
+    public ResponseEntity<UserEntity> login(@PathVariable String rut, @PathVariable String password) {
         UserEntity user = userService.getUserByRut(rut);
-        if (user != null) {
+        if (user.getRut().equals(rut) && user.getPassword().equals(password)) {
             return ResponseEntity.ok(user);
         }
         return ResponseEntity.badRequest().build();

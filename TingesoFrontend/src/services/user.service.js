@@ -12,8 +12,8 @@ const findByRut = rut => {
     return httpClient.get(`/api/v1/users/${rut}`);
 }
 
-const login = rut => {
-    return httpClient.post(`/api/v1/users/login/${rut}`);
+const login = (rut, password) => {
+    return httpClient.post(`/api/v1/users/login/${rut}/${password}`);
 }
 
 export default { getAll, create, findByRut, login };

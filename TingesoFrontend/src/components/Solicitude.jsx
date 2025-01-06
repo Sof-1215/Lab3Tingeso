@@ -57,35 +57,45 @@ function Solicitude() {
       });
   };
 
-  const FileUpload = (label, key) => (
-    <FormControl fullWidth margin="normal">
-      <Typography>{label}:</Typography>
-      <input
-        type="file"
-        id={key}
-        style={{ display: 'none' }}
-        onChange={(e) => handleFileChange(e, key)}
-      />
-      <Button
-      variant="contained"
-      component="label"
-      sx={{ backgroundColor: "#092292" }}
-      htmlFor={key}>
-        {files[key] ? files[key].name : 'Upload file'}
-      </Button>
-    </FormControl>
-  );
+  const FileUpload = (label, key) => {
+    const isFileUploaded = files[key] !== null;
+
+    return (
+      <FormControl fullWidth margin="normal">
+        <Typography>{label}:</Typography>
+        <input
+          type="file"
+          id={key}
+          style={{ display: 'none' }}
+          onChange={(e) => handleFileChange(e, key)}
+        />
+        <Button
+          variant="contained"
+          component="label"
+          sx={{ 
+            backgroundColor: isFileUploaded ? '#59b526' : '#2d53ff',
+            '&:hover': {
+              backgroundColor: isFileUploaded ? '#40821c' : '#1a40b8',
+            },
+          }}
+          htmlFor={key}
+        >
+          {isFileUploaded ? files[key].name : 'Upload file'}
+        </Button>
+      </FormControl>
+    );
+  };
 
   return (
     <Box className="Box-form">
       <Typography variant="h4" align="center" color="textPrimary" gutterBottom>
-      Mortgage loan solicitude
+        Solicitud de crédito hipotecario
       </Typography>
 
       <form onSubmit={handleSubmit}>
         <FormControl fullWidth margin="normal">
           <TextField
-            label="User RUT"
+            label="RUT"
             type="text"
             value={rutUser}
             onChange={(e) => setRutUser(e.target.value)}
@@ -94,16 +104,16 @@ function Solicitude() {
         </FormControl>
 
         <FormControl fullWidth margin="normal">
-          <InputLabel>Loan type</InputLabel>
+          <InputLabel>Tipo de préstamo</InputLabel>
           <Select
             value={idMortgageLoan}
             onChange={(e) => setIdMortgageLoan(e.target.value)}
             required
           >
-            <MenuItem value={1}>First home loan</MenuItem>
-            <MenuItem value={2}>Second home loan</MenuItem>
-            <MenuItem value={3}>Commercial properties loan</MenuItem>
-            <MenuItem value={4}>Remodeling loan</MenuItem>
+            <MenuItem value={1}>Primera vivienda</MenuItem>
+            <MenuItem value={2}>Segunda vivienda</MenuItem>
+            <MenuItem value={3}>Propiedades comerciales</MenuItem>
+            <MenuItem value={4}>Remodelación</MenuItem>
           </Select>
         </FormControl>
 
@@ -145,10 +155,16 @@ function Solicitude() {
           type="submit"
           fullWidth
           variant="contained"
-          sx={{ backgroundColor: "#2d53ff", marginTop: 2 }}
+          sx={{ 
+            backgroundColor: "#2d53ff", 
+            marginTop: 2,
+            '&:hover': {
+              backgroundColor: '#1a40b8', // Color más oscuro al pasar el cursor
+            },
+          }}
           startIcon={<SendIcon />}
         >
-          Submit Request
+          Enviar solicitud
         </Button>
       </form>
     </Box>

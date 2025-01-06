@@ -13,10 +13,12 @@ const Register = () => {
   const [name, setName] = useState("");
   const [birthdate, setbirthdate] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [rutError, setRutError] = useState("");
   const [nameError, setNameError] = useState("");
   const [birthdateError, setBirthdateError] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -41,6 +43,10 @@ const Register = () => {
     return birthDateObject <= today && birthDateObject >= YearsAgo;
   };
 
+  const validatePassword = (password) => {
+    return password.length >= 8; // Ensure the password has at least 8 characters
+  };
+  
   const saveUser = (e) => {
     e.preventDefault();
 
@@ -49,28 +55,34 @@ const Register = () => {
     setNameError("");
     setBirthdateError("");
     setEmailError("");
+    setPasswordError("");
     setError("");
 
     // Validate fields
     let hasError = false;
 
     if (!validateRut(rut)) {
-      setRutError("Invalid RUT. It must be in the format 12345678-9 or 12345678-K.");
+      setRutError("RUT inválido. Debe seguir el formato 12345678-9 o 12345678-K.");
       hasError = true;
     }
 
     if (!validateEmail(email)) {
-      setEmailError("Invalid email.");
+      setEmailError("Email inválido.");
       hasError = true;
     }
 
     if (!validateBirthdate(birthdate)) {
-      setBirthdateError("Invalid birthdate.");
+      setBirthdateError("Fecha de nacimiento inválida.");
+      hasError = true;
+    }
+
+    if (!validatePassword(password)) {
+      setPasswordError("La contra<seña debe tener al menos 8 carácteres.");
       hasError = true;
     }
 
     if (name.trim() === "") {
-      setNameError("Name is required.");
+      setNameError("Nombre requerido.");
       hasError = true;
     }
 
@@ -83,6 +95,7 @@ const Register = () => {
       name,
       birthdate: birthdateObject,
       email,
+      password,
     };
 
     userService
@@ -100,7 +113,7 @@ const Register = () => {
   return (
     <Box className="Box-form" component="form">
       <Typography variant="h4" gutterBottom>
-        New User
+        Registro
       </Typography>
       <hr />
       <FormControl fullWidth sx={{ mb: 2 }}>
@@ -119,7 +132,7 @@ const Register = () => {
       <FormControl fullWidth sx={{ mb: 2 }}>
         <TextField
           id="name"
-          label="Name"
+          label="Nombre"
           value={name}
           variant="outlined"
           onChange={(e) => setName(e.target.value)}
@@ -132,7 +145,7 @@ const Register = () => {
       <FormControl fullWidth sx={{ mb: 2 }}>
         <TextField
           id="birthdate"
-          label="Birthdate"
+          label="Fecha de nacimiento"
           type="date"
           value={birthdate}
           variant="outlined"
@@ -158,17 +171,31 @@ const Register = () => {
         />
       </FormControl>
 
+      <FormControl fullWidth sx={{ mb: 2 }}>
+        <TextField
+          id="password"
+          label="Contraseña"
+          type="password"
+          value={password}
+          variant="outlined"
+          onChange={(e) => setPassword(e.target.value)}
+          helperText={passwordError}
+          error={!!passwordError}
+          required
+        />
+      </FormControl>
+
       <Button
         variant="contained"
         onClick={saveUser}
         sx={{ backgroundColor: "#2d53ff" }}
         startIcon={<SendIcon />}
       >
-        Finish
+        Registrar
       </Button>
 
       <Link to="/" style={{ textDecoration: 'none', color: '#3f51b5' }}>
-        Return to home
+        Volver
       </Link>
     </Box>
   );

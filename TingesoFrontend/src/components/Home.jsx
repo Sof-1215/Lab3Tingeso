@@ -40,24 +40,23 @@ const Home = () => {
 
   return (
     <div className="Box-form">
-      <h1>Welcome to PrestaBanco</h1>
+      <h1>Bienvenido a PrestaBanco</h1>
 
       {isAuthenticated ? (
         <div>
-          <p>You are logged in! Enjoy your experience.</p>
-          <button className='button-style' onClick={goToSolicitude}>Make a Solicitude</button>
-          <button className='button-style' onClick={goToSimulator}>Simulate Loan</button>
-          <button className='button-style' onClick={goToListSolicitudes}>Show Loan Solicitudes</button>
-          <button className='button-style' onClick={handleLogout}>Logout</button>
+          <p>Haz iniciado sesión. ¡Disfruta tu experiencia!</p>
+          <button className='button-style' onClick={goToSolicitude}>Hacer una solicitud</button>
+          <button className='button-style' onClick={goToSimulator}>Simular préstamo</button>
+          <button className='button-style' onClick={goToListSolicitudes}>Mis solicitudes</button>
+          <button className='button-style' onClick={handleLogout}>Salir</button>
         </div>
       ) : (
         <div>
-          <p>This is the main page, you can carry out credit simulations and request different types of loans depending on what you need.</p>
-          <p>Log in and explore our different offers and benefits for our clients</p>
-          <button className='button-style' onClick={goToLogin}>Login</button>
-          <p>Don't have an account?</p>
-          <p>We want to help you and are waiting for you to join us.</p>
-          <button className='button-style' onClick={goToRegister}>Register here</button>
+          <p>Esta es la página principal, al ser cliente de Prestabanco puedes realizar simulaciones de préstamos y realizar solicitudes de distintos tipos según tus necesidades.</p>
+          <p>Inicia sesión y explora las diferentes oferts y beneficios que les ofrecemos a nuestros clientes.</p>
+          <button className='button-style' onClick={goToLogin}>Iniciar sesión</button>
+          <p>¿Aún no eres cliente? ¡Queremos ayudarte! Estamos esperando a que te nos unas.</p>
+          <button className='button-style' onClick={goToRegister}>Registrarse</button>
         </div>
       )}
     </div>
