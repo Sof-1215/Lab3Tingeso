@@ -24,14 +24,22 @@ public class LoanSolicitudeService {
         return loanSolicitudeRepository.findById(id).get();
     }
 
-    public LoanSolicitudeEntity create(String rutUser, Long idMortgageLoan,
+    public LoanSolicitudeEntity create(String rutUser, Long idMortgageLoan, int salary,
+                                       int amount, float interestRate, int propertyValue, int termYears,
                                        MultipartFile proofOfIncome, MultipartFile appraisalCertificate,
                                        MultipartFile creditHistory, MultipartFile houseDeed,
                                        MultipartFile businessFinancialStatus, MultipartFile businessPlan,
-                                       MultipartFile remodelBudget) throws IOException {
+                                       MultipartFile remodelBudget, MultipartFile dicomHistory,
+                                       MultipartFile transactionHistory) throws IOException {
         LoanSolicitudeEntity solicitudeNew = new LoanSolicitudeEntity();
         solicitudeNew.setRutUser(rutUser);
         solicitudeNew.setIdMortgageLoan(idMortgageLoan);
+        solicitudeNew.setSalary(salary);
+        solicitudeNew.setAmount(amount);
+        solicitudeNew.setInterestRate(interestRate);
+        solicitudeNew.setPropertyValue(propertyValue);
+        solicitudeNew.setTearmYears(termYears);
+        solicitudeNew.setState(1);
 
         if (proofOfIncome != null) {
             solicitudeNew.setProofOfIncome(proofOfIncome.getBytes());
@@ -53,6 +61,14 @@ public class LoanSolicitudeService {
         }
         if (remodelBudget != null) {
             solicitudeNew.setRemodelBudget(remodelBudget.getBytes());
+        }
+
+        if (dicomHistory != null) {
+            solicitudeNew.setDicomHistory(dicomHistory.getBytes());
+        }
+
+        if (transactionHistory != null) {
+            solicitudeNew.setTransactionHistory(transactionHistory.getBytes());
         }
 
         return loanSolicitudeRepository.save(solicitudeNew);

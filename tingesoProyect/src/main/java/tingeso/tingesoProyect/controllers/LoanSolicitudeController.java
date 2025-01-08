@@ -32,17 +32,25 @@ public class LoanSolicitudeController {
     @PostMapping("/store")
     public ResponseEntity<String> saveSolicitude (@RequestParam(value = "rutUser") String rutUser,
                                                   @RequestParam(value = "idMortgageLoan") Long idMortgageLoan,
+                                                  @RequestParam(value = "salary") int salary,
+                                                  @RequestParam(value = "amount") int amount,
+                                                  @RequestParam(value = "interestRate") float interestRate,
+                                                  @RequestParam(value = "propertyValue") int propertyValue,
+                                                  @RequestParam(value = "termYears") int termYears,
                                                   @RequestParam(value = "proofOfIncome", required = false) MultipartFile proofOfIncome,
                                                   @RequestParam(value = "appraisalCertificate", required = false) MultipartFile appraisalCertificate,
                                                   @RequestParam(value = "creditHistory", required = false) MultipartFile creditHistory,
                                                   @RequestParam(value = "houseDeed", required = false) MultipartFile houseDeed,
                                                   @RequestParam(value = "businessFinancialStatus", required = false) MultipartFile businessFinancialStatus,
                                                   @RequestParam(value = "businessPlan", required = false) MultipartFile businessPlan,
-                                                  @RequestParam(value = "remodelBudget", required = false) MultipartFile remodelBudget)
+                                                  @RequestParam(value = "remodelBudget", required = false) MultipartFile remodelBudget,
+                                                  @RequestParam(value = "dicomHistory", required = false) MultipartFile dicomHistory,
+                                                  @RequestParam(value = "transactionHistory", required = false) MultipartFile transactionHistory)
     throws IOException {
-        loanSolicitudeService.create(rutUser, idMortgageLoan, proofOfIncome, appraisalCertificate, creditHistory,
-                houseDeed, businessFinancialStatus, businessPlan, remodelBudget);
-        return ResponseEntity.status(HttpStatus.OK).body("Uploaded files");
+        loanSolicitudeService.create(rutUser, idMortgageLoan, salary, amount, interestRate, propertyValue,
+                termYears, proofOfIncome, appraisalCertificate, creditHistory,
+                houseDeed, businessFinancialStatus, businessPlan, remodelBudget, dicomHistory, transactionHistory);
+        return ResponseEntity.status(HttpStatus.OK).body("Archivos subidos");
     }
 
     @PostMapping("/updatestate/{loanSolicitudeId}")

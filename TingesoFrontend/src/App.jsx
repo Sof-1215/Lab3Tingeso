@@ -9,6 +9,7 @@ import Solicitude from './components/Solicitude';
 import ListSolicitude from './components/ListSolicitude';
 import EditSolicitude from './components/EditSolicitude';
 import AllSolicitudes from './components/AllSolicitudes';
+import Evaluation from './components/Evaluation';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
               <Route path="loan-solicitudes" element={<ListSolicitude />} />
               <Route path="edit-solicitude/:id" element={<EditSolicitude />} />
               <Route path="get-solicitudes" element={<AllSolicitudes />} />
+              <Route path="/evaluation-solicitude/:id" element={<Evaluation />} />
             </Routes>
           </div>
       </Router>

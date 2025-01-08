@@ -55,8 +55,8 @@ const LoanSolicitudeList = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentSolicitudes = loanSolicitudes.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handleEdit = (id) => {
-    navigate(`/edit-solicitude/${id}`);
+  const handleEvaluation = (id) => {
+    navigate(`/evaluation-solicitude/${id}`);
   };
 
   return (
@@ -93,9 +93,9 @@ const LoanSolicitudeList = () => {
                       <Button
                         variant="outlined"
                         startIcon={<EditIcon />}
-                        onClick={() => handleEdit(solicitud.id)}
+                        onClick={() => handleEvaluation(solicitud.id)}
                       >
-                        Editar
+                        Revisar
                       </Button>
                     </TableCell>
                   </TableRow>

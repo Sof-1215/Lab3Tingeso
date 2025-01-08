@@ -28,6 +28,21 @@ public class LoanSolicitudeEntity {
     @Column(name = "monthlyinstallments")
     private Integer monthlyInstallments;
 
+    @Column(name = "salary")
+    private int salary;
+
+    @Column(name = "amount")
+    private int amount;
+
+    @Column(name = "interestrate")
+    private float interestRate;
+
+    @Column(name = "propertyvalue")
+    private int propertyValue;
+
+    @Column(name = "termyears")
+    private int tearmYears;
+
     //Required documents
     @Column(name = "proofofincome")
     private byte[] proofOfIncome;
@@ -49,4 +64,10 @@ public class LoanSolicitudeEntity {
 
     @Column(name = "remodelbudget")
     private byte[] remodelBudget;
+
+    @Column(name = "dicomhistory")
+    private byte[] dicomHistory;
+
+    @Column(name = "transactionhistory")
+    private byte[] transactionHistory;
 }
