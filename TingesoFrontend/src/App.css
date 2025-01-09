@@ -38,3 +38,7 @@ body {
   background-color: #2d53ff;
   
 }
+
+.button-style:hover {
+  background-color: #1a40b8;
+}

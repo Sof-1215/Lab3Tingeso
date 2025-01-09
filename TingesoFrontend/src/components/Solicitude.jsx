@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import loanSolicitudeService from '../services/loansolicitude.service';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -125,7 +126,7 @@ function Solicitude() {
     try {
       const response = await loanSolicitudeService.store(formData);
       if (response.data === "Archivos subidos") {
-        setResponseMessage("Archivos subidos exitosamente.");
+        setResponseMessage("Solicitud enviada exitosamente.");
       } else {
         setResponseMessage("Error al subir archivos.");
       }

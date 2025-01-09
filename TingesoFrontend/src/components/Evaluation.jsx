@@ -152,7 +152,13 @@ const EditSolicitude = () => {
               {solicitudeData[field] ? (
                 <Button
                   variant="contained"
-                  sx={{ backgroundColor: "#2d53ff" }}
+                  sx={{
+                    backgroundColor: "#2d53ff",
+                    marginTop: 2,
+                    '&:hover': {
+                      backgroundColor: '#1a40b8', // Color más oscuro al pasar el cursor
+                    },
+                  }}
                   onClick={() => handleDownload(solicitudeData[field], `${field}.pdf`, field)}
                 >
                   Descargar {field.replace(/([A-Z])/g, " $1").toUpperCase()}
@@ -169,7 +175,13 @@ const EditSolicitude = () => {
             <Button
               type="button"
               variant="contained"
-              sx={{ backgroundColor: "#2d53ff" }}
+              sx={{
+                backgroundColor: "#2d53ff",
+                marginTop: 2,
+                '&:hover': {
+                  backgroundColor: '#1a40b8', // Color más oscuro al pasar el cursor
+                },
+              }}
               onClick={handleEvaluate}
             >
               Evaluar

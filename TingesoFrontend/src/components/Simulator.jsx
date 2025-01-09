@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -201,11 +202,20 @@ const Simulator = () => {
                     type="submit"
                     fullWidth
                     variant="contained"
-                    sx={{ backgroundColor: "#2d53ff" }}
+                    sx={{
+                        backgroundColor: "#2d53ff",
+                        marginTop: 2,
+                        '&:hover': {
+                          backgroundColor: '#1a40b8', // Color más oscuro al pasar el cursor
+                        },
+                      }}
                     startIcon={<SendIcon />}
                 >
                     Calcular cuota mensual
                 </Button>
+                      <Link to="/" style={{ textDecoration: 'none', color: '#3f51b5' }}>
+                        Volver
+                      </Link>
             </form>
 
             {monthlyPayment !== null && (
