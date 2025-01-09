@@ -6,9 +6,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tingeso.tingesoProyect.entities.LoanSolicitudeEntity;
+import tingeso.tingesoProyect.entities.UserEntity;
 import tingeso.tingesoProyect.services.LoanSolicitudeService;
+import tingeso.tingesoProyect.services.UserService;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -17,6 +23,9 @@ import java.util.List;
 public class LoanSolicitudeController {
     @Autowired
     LoanSolicitudeService loanSolicitudeService;
+
+    @Autowired
+    UserService userService;
     @GetMapping("/getall")
     public ResponseEntity<List<LoanSolicitudeEntity>> getAll() {
         List<LoanSolicitudeEntity> solicitudes = loanSolicitudeService.getAllLoanSolicitudes();
@@ -37,6 +46,8 @@ public class LoanSolicitudeController {
                                                   @RequestParam(value = "interestRate") float interestRate,
                                                   @RequestParam(value = "propertyValue") int propertyValue,
                                                   @RequestParam(value = "termYears") int termYears,
+                                                  @RequestParam(value = "jobSeniority") int jobSeniority,
+                                                  @RequestParam(value = "debtsAmount") int debtsAmount,
                                                   @RequestParam(value = "proofOfIncome", required = false) MultipartFile proofOfIncome,
                                                   @RequestParam(value = "appraisalCertificate", required = false) MultipartFile appraisalCertificate,
                                                   @RequestParam(value = "creditHistory", required = false) MultipartFile creditHistory,
@@ -48,7 +59,7 @@ public class LoanSolicitudeController {
                                                   @RequestParam(value = "transactionHistory", required = false) MultipartFile transactionHistory)
     throws IOException {
         loanSolicitudeService.create(rutUser, idMortgageLoan, salary, amount, interestRate, propertyValue,
-                termYears, proofOfIncome, appraisalCertificate, creditHistory,
+                termYears, jobSeniority, debtsAmount, proofOfIncome, appraisalCertificate, creditHistory,
                 houseDeed, businessFinancialStatus, businessPlan, remodelBudget, dicomHistory, transactionHistory);
         return ResponseEntity.status(HttpStatus.OK).body("Archivos subidos");
     }
@@ -71,5 +82,50 @@ public class LoanSolicitudeController {
     public ResponseEntity<LoanSolicitudeEntity> updateSolicitude (@PathVariable Long id, @RequestBody LoanSolicitudeEntity solicitude) {
         LoanSolicitudeEntity newSolicitude = loanSolicitudeService.update(id, solicitude);
         return ResponseEntity.ok(newSolicitude);
+    }
+
+    @CrossOrigin(origins = "http://localhost:5174")
+    @PostMapping("/evaluation/{idMortgageLoan}")
+    public ResponseEntity<String> Evaluation(@PathVariable Long idMortgageLoan) {
+        // Obtiene la solicitud de préstamo por ID
+        LoanSolicitudeEntity solicitude = loanSolicitudeService.getSolicitudeById(idMortgageLoan);
+
+        int jobSeniority = solicitude.getJobSeniority();
+        int debts = solicitude.getDebtsAmount();
+
+        // Calcula el porcentaje de cuota sobre el ingreso
+        float cuotaIngreso = ((float) solicitude.getMonthlyInstallments() / solicitude.getSalary()) * 100;
+
+        // Calcula la relación deuda/ingreso
+        float deudaIngreso = ((float) debts / solicitude.getMonthlyInstallments()) * 100;
+
+        // Obtiene el rut del usuario asociado
+        String rutUser = solicitude.getRutUser();
+        UserEntity user = userService.getUserByRut(rutUser);
+
+        // Obtiene la fecha de nacimiento del usuario
+        Date birthdate = user.getBirthdate();
+
+        // Calcula la edad directamente aquí
+        int age = 0;
+        if (birthdate != null) {
+            LocalDate birthDateLocal = birthdate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate today = LocalDate.now();
+            age = Period.between(birthDateLocal, today).getYears();
+        } else {
+            return ResponseEntity.badRequest().body("Error: La fecha de nacimiento no está disponible.");
+        }
+
+        // Imprime o utiliza los resultados como sea necesario
+        System.out.println("Cuota sobre ingreso: " + cuotaIngreso + "%");
+        System.out.println("Deuda sobre ingreso: " + deudaIngreso + "%");
+        System.out.println("Edad del usuario: " + age);
+        System.out.println("Antigüedad laboral: " + jobSeniority);
+        System.out.println("Deudas: " + debts);
+
+        // Devuelve una respuesta adecuada
+        String responseMessage = String.format("Evaluación completada: Cuota ingreso = %.2f%%, Deuda ingreso = %.2f%%, Edad = %d, Antigüedad laboral = %d años, Deudas = %d",
+                cuotaIngreso, deudaIngreso, age, jobSeniority, debts);
+        return ResponseEntity.ok(responseMessage);
     }
 }

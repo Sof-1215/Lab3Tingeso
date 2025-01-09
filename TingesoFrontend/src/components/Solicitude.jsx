@@ -18,6 +18,8 @@ function Solicitude() {
   const [amount, setAmount] = useState('');
   const [interestRate, setInterestRate] = useState('');
   const [termYears, setTermYears] = useState('');
+  const [jobSeniority, setJobSeniority] = useState('');
+  const [debtsAmount, setDebtsAmount] = useState('');
   const [files, setFiles] = useState({
     proofOfIncome: null,
     appraisalCertificate: null,
@@ -29,6 +31,15 @@ function Solicitude() {
     dicomHistory: null,
     transactionHistory: null,
   });
+  const [errors, setErrors] = useState({
+    propertyValue: '',
+    amount: '',
+    interestRate: '',
+    termYears: '',
+    idMortgageLoan: '',
+  });
+
+  const [responseMessage, setResponseMessage] = useState('');
 
   const conditions = {
     1: "Recuerda: Plazo hasta 30 años, 2.5%-5.0% interés anual, 80% del valor de la propiedad.",
@@ -49,7 +60,6 @@ function Solicitude() {
     setter(e.target.value);
   };
 
-
   const handleFileChange = (event, key) => {
     setFiles({ ...files, [key]: event.target.files[0] });
   };
@@ -65,20 +75,23 @@ function Solicitude() {
     formData.append('amount', amount);
     formData.append('interestRate', interestRate);
     formData.append('termYears', termYears);
+    formData.append('jobSeniority', jobSeniority);
+    formData.append('debtsAmount', debtsAmount);
     Object.entries(files).forEach(([key, value]) => {
       if (value) formData.append(key, value);
     });
 
-    loanSolicitudeService
-      .store(formData)
-      .then((response) => {
-        console.log(response.data);
-        alert(response.data);
-      })
-      .catch((error) => {
-        console.error('Error sending request:', error);
-        alert('Error sending request');
-      });
+    try {
+      const response = await loanSolicitudeService.store(formData);
+      if (response.data === "Archivos subidos") {
+        setResponseMessage("Archivos subidos exitosamente.");
+      } else {
+        setResponseMessage("Error al subir archivos.");
+      }
+    } catch (error) {
+      console.error('Error sending request:', error);
+      setResponseMessage('Error al enviar la solicitud.');
+    }
   };
 
   const FileUpload = (label, key) => {
@@ -147,6 +160,24 @@ function Solicitude() {
           )}
         </FormControl>
         <TextField
+          label="Antigüedad laboral (años)"
+          type="number"
+          value={jobSeniority}
+          onChange={handleChange(setJobSeniority, "jobSeniority")}
+          fullWidth
+          margin="normal"
+          required
+        />
+        <TextField
+          label="Monto de deudas"
+          type="number"
+          value={debtsAmount}
+          onChange={handleChange(setDebtsAmount, "debtsAmount")}
+          fullWidth
+          margin="normal"
+          required
+        />
+        <TextField
           label="Salario"
           type="number"
           value={salary}
@@ -192,7 +223,6 @@ function Solicitude() {
           required
         />
 
-
         {FileUpload('Historial DICOM', 'dicomHistory')}
         {FileUpload('Historial de transacciones', 'transactionHistory')}
 
@@ -225,17 +255,18 @@ function Solicitude() {
         {idMortgageLoan === 4 && (
           <>
             {FileUpload('Comprobante de ingresos', 'proofOfIncome')}
-            {FileUpload('Presupuesto de remodelacióm', 'remodelBudget')}
+            {FileUpload('Presupuesto de remodelación', 'remodelBudget')}
             {FileUpload('Certificado de avalúo', 'appraisalCertificate')}
           </>
         )}
 
         <Button
+          id='submit'
           type="submit"
           fullWidth
           variant="contained"
-          sx={{ 
-            backgroundColor: "#2d53ff", 
+          sx={{
+            backgroundColor: "#2d53ff",
             marginTop: 2,
             '&:hover': {
               backgroundColor: '#1a40b8', // Color más oscuro al pasar el cursor
@@ -246,6 +277,12 @@ function Solicitude() {
           Enviar solicitud
         </Button>
       </form>
+
+      {responseMessage && (
+        <Typography variant="h4" color="1a40b8" sx={{ color: "#59b526" , marginTop: 2 }}>
+          {responseMessage}
+        </Typography>
+      )}
     </Box>
   );
 }

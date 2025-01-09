@@ -21,4 +21,32 @@ public class MortgageLoanService {
         return mortgageLoanRepository.findById(id).get();
     }
 
+    public int simulator(float amount, float interestRate, int termYears, float propertyValue, int loanType) {
+        if (loanType == 0) {
+            throw new IllegalArgumentException("loanType cannot be null");
+        }
+
+        float P = amount; // Loan amount
+        float r = (interestRate / 100) / 12; // Monthly interest rate
+        int n = termYears * 12; // Total number of payments in months
+        float maxAmount;
+
+        Long LoanType = (long) loanType;
+        MortgageLoanEntity loan = getMortgageLoanById(LoanType);
+        long loanId = LoanType;
+
+        maxAmount = propertyValue * loan.getMaxAmount();
+        if (termYears > loan.getMaxTerm() || r * 12 < loan.getMinInterestRate() || r * 12 > loan.getMaxInterestRate() || P > maxAmount) {
+            throw new IllegalArgumentException("Invalid values.");
+        }
+
+        // Handle zero interest rate case
+        if (r == 0) {
+            return (int) P / n;
+        }
+
+        // Calculate monthly payment using the formula
+        double M = P * ((r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1));
+        return (int) M;
+    }
 }

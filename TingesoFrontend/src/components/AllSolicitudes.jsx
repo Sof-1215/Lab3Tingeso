@@ -14,11 +14,17 @@ const LoanSolicitudeList = () => {
 
   // Mapeo de IDs a nombres de préstamos
   const loanNames = {
-    1: "Préstamo Hipotecario",
-    2: "Préstamo Personal",
-    3: "Préstamo de Auto",
-    4: "Préstamo Estudiantil",
+    1: "Préstamo Primera vivienda",
+    2: "Préstamo Segunda vivienda",
+    3: "Préstamo Propiedades comerciales",
+    4: "Préstamo Remodelación",
   };
+
+  const states = {
+    1: "En revisión",
+    2: "Aprobada",
+    3: "Rechazada",
+  }
 
   useEffect(() => {
     const fetchSolicitudes = async () => {
@@ -84,7 +90,8 @@ const LoanSolicitudeList = () => {
                 {currentSolicitudes.map((solicitud) => (
                   <TableRow key={solicitud.id}>
                     <TableCell>{solicitud.id}</TableCell>
-                    <TableCell>{solicitud.state}</TableCell>
+                    <TableCell>
+                      {states[solicitud.state]}</TableCell>
                     <TableCell>{solicitud.monthlyInstallments}</TableCell>
                     <TableCell>
                       {loanNames[solicitud.idMortgageLoan] || "-"}

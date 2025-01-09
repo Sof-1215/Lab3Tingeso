@@ -25,7 +25,7 @@ public class LoanSolicitudeService {
     }
 
     public LoanSolicitudeEntity create(String rutUser, Long idMortgageLoan, int salary,
-                                       int amount, float interestRate, int propertyValue, int termYears,
+                                       int amount, float interestRate, int propertyValue, int termYears, int jobSeniority, int debtsAmount,
                                        MultipartFile proofOfIncome, MultipartFile appraisalCertificate,
                                        MultipartFile creditHistory, MultipartFile houseDeed,
                                        MultipartFile businessFinancialStatus, MultipartFile businessPlan,
@@ -39,7 +39,17 @@ public class LoanSolicitudeService {
         solicitudeNew.setInterestRate(interestRate);
         solicitudeNew.setPropertyValue(propertyValue);
         solicitudeNew.setTearmYears(termYears);
+        solicitudeNew.setJobSeniority(jobSeniority);
+        solicitudeNew.setDebtsAmount(debtsAmount);
         solicitudeNew.setState(1);
+
+        float r = (interestRate / 100) / 12; // Monthly interest rate
+        int n = termYears * 12;
+        double monthlyInstallments = amount * ((r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1));
+
+        int monthlyInstallmentsInt = (int) Math.round(monthlyInstallments);
+        solicitudeNew.setMonthlyInstallments(monthlyInstallmentsInt);
+
 
         if (proofOfIncome != null) {
             solicitudeNew.setProofOfIncome(proofOfIncome.getBytes());

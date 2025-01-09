@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { TextField, Button, Paper, Grid } from "@mui/material";
 import loanSolicitudeService from "../services/loansolicitude.service";
+import axios from "axios";
 
 // Función para limpiar base64
 const cleanBase64 = (base64Data) => {
@@ -57,6 +58,7 @@ const EditSolicitude = () => {
         const data = await loanSolicitudeService.getLoanSolicitudeById(id);
         setSolicitudeData({
           state: data.state || "",
+          id: data.id || "",
           monthlyInstallments: data.monthlyInstallments || "",
           idMortgageLoan: data.idMortgageLoan || "",
           proofOfIncome: data.proofOfIncome || null,
@@ -90,15 +92,15 @@ const EditSolicitude = () => {
     downloadFile(fileData, fileName);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleEvaluate = async () => {
     try {
-      // Aquí implementas la actualización de la solicitud
-      await updateLoanSolicitude(id, solicitudeData);
-      navigate("/loan-solicitudes"); // Redirige a la lista de solicitudes
-    } catch (err) {
-      console.error("Error al actualizar la solicitud:", err);
-      setError("No se pudo actualizar la solicitud.");
+      const response = await axios.post(
+        `http://localhost:8090/api/v1/loansolicitude/evaluation/${solicitudeData.id}`
+      );
+      alert(response.data); // Muestra el mensaje de la evaluación
+    } catch (error) {
+      console.error("Error al evaluar la solicitud:", error);
+      alert("Hubo un error al realizar la evaluación.");
     }
   };
 
@@ -106,7 +108,7 @@ const EditSolicitude = () => {
     <Paper style={{ padding: 20 }}>
       <h1>Evaluar Solicitud</h1>
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
+      <form>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
@@ -149,132 +151,12 @@ const EditSolicitude = () => {
           </Grid>
 
           <Grid item xs={12}>
-            {solicitudeData.transactionHistory && (
-              <Button
-                variant="contained"
-                sx={{ backgroundColor: "#2d53ff" }}
-                onClick={() => handleDownload(solicitudeData.transactionHistory, "transactionHistory.pdf")}
-              >
-                Descargar Comprobante de Ingresos
-              </Button>
-            )}
-          </Grid>
-
-
-
-
-          <Grid item xs={12}>
-            {solicitudeData.proofOfIncome && (
-              <Button
-                variant="contained"
-                sx={{ backgroundColor: "#2d53ff" }}
-                onClick={() => handleDownload(solicitudeData.proofOfIncome, "proofOfIncome.pdf")}
-              >
-                Descargar Comprobante de Ingresos
-              </Button>
-            )}
-          </Grid>
-          <Grid item xs={12}>
-            {solicitudeData.appraisalCertificate && (
-              <Button
-                variant="contained"
-                sx={{ backgroundColor: "#2d53ff" }}
-                onClick={() => handleDownload(solicitudeData.appraisalCertificate, "appraisalCertificate.pdf")}
-              >
-                Descargar Certificado de Avalúo
-              </Button>
-            )}
-          </Grid>
-          <Grid item xs={12}>
-            {solicitudeData.creditHistory && (
-              <Button
-                variant="contained"
-                sx={{ backgroundColor: "#2d53ff" }}
-                onClick={() => handleDownload(solicitudeData.creditHistory, "creditHistory.pdf")}
-              >
-                Descargar Historial Crediticio
-              </Button>
-            )}
-          </Grid>
-          <Grid item xs={12}>
-            {solicitudeData.houseDeed && (
-              <Button
-                variant="contained"
-                sx={{ backgroundColor: "#2d53ff" }}
-                onClick={() => handleDownload(solicitudeData.houseDeed, "houseDeed.pdf")}
-              >
-                Descargar Escritura de vivienda
-              </Button>
-            )}
-          </Grid>
-          <Grid item xs={12}>
-            {solicitudeData.businessFinancialStatus && (
-              <Button
-                variant="contained"
-                sx={{ backgroundColor: "#2d53ff" }}
-                onClick={() => handleDownload(solicitudeData.businessFinancialStatus, "businessFinancialStatus.pdf")}
-              >
-                Descargar Estado financiero del negocio
-              </Button>
-            )}
-          </Grid>
-          <Grid item xs={12}>
-            {solicitudeData.businessPlan && (
-              <Button
-                variant="contained"
-                sx={{ backgroundColor: "#2d53ff" }}
-                onClick={() => handleDownload(solicitudeData.businessPlan, "businessPlan.pdf")}
-              >
-                Descargar Plan de negocios
-              </Button>
-            )}
-          </Grid>
-          <Grid item xs={12}>
-            {solicitudeData.remodelBudget && (
-              <Button
-                variant="contained"
-                sx={{ backgroundColor: "#2d53ff" }}
-                onClick={() => handleDownload(solicitudeData.remodelBudget, "remodelBudget.pdf")}
-              >
-                Descargar Presupuesto de Remodelación
-              </Button>
-            )}
-          </Grid>
-          <Grid item xs={12}>
-            {solicitudeData.appraisalCertificate && (
-              <Button
-                variant="contained"
-                sx={{ backgroundColor: "#2d53ff" }}
-                onClick={() => handleDownload(solicitudeData.appraisalCertificate, "appraisalCertificate.pdf")}
-              >
-                Descargar Certificado de Tasación
-              </Button>
-            )}
-          </Grid>
-          <Grid item xs={12}>
-            {solicitudeData.appraisalCertificate && (
-              <Button
-                variant="contained"
-                sx={{ backgroundColor: "#2d53ff" }}
-                onClick={() => handleDownload(solicitudeData.appraisalCertificate, "appraisalCertificate.pdf")}
-              >
-                Descargar Certificado de Tasación
-              </Button>
-            )}
-          </Grid>
-          <Grid item xs={12}>
-            {solicitudeData.appraisalCertificate && (
-              <Button
-                variant="contained"
-                sx={{ backgroundColor: "#2d53ff" }}
-                onClick={() => handleDownload(solicitudeData.appraisalCertificate, "appraisalCertificate.pdf")}
-              >
-                Descargar Certificado de Tasación
-              </Button>
-            )}
-          </Grid>
-          <Grid item xs={12}>
-            <Button type="submit" variant="contained" sx={{ backgroundColor: "#2d53ff" }}>
+            <Button
+              type="button"
+              variant="contained"
+              sx={{ backgroundColor: "#2d53ff" }}
+              onClick={handleEvaluate}
+            >
               Evaluar
             </Button>
           </Grid>
@@ -285,3 +167,4 @@ const EditSolicitude = () => {
 };
 
 export default EditSolicitude;
+

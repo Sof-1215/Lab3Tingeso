@@ -43,6 +43,12 @@ public class LoanSolicitudeEntity {
     @Column(name = "termyears")
     private int tearmYears;
 
+    @Column(name = "jobseniority")
+    private int jobSeniority;
+
+    @Column(name = "debtsamount")
+    private int debtsAmount;
+
     //Required documents
     @Column(name = "proofofincome")
     private byte[] proofOfIncome;

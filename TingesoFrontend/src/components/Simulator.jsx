@@ -201,7 +201,7 @@ const Simulator = () => {
 
             {monthlyPayment !== null && (
                 <Box marginTop="20px" textAlign="center">
-                    <Typography variant="h5" color="textSecondary">
+                    <Typography variant="h4" color="59b526">
                         Cuota mensual: ${monthlyPayment.toFixed(0)}
                     </Typography>
                 </Box>
