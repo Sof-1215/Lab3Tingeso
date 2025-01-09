@@ -20,6 +20,7 @@ function Solicitude() {
   const [termYears, setTermYears] = useState('');
   const [jobSeniority, setJobSeniority] = useState('');
   const [debtsAmount, setDebtsAmount] = useState('');
+  const [errors, setErrors] = useState({});
   const [files, setFiles] = useState({
     proofOfIncome: null,
     appraisalCertificate: null,
@@ -31,13 +32,6 @@ function Solicitude() {
     dicomHistory: null,
     transactionHistory: null,
   });
-  const [errors, setErrors] = useState({
-    propertyValue: '',
-    amount: '',
-    interestRate: '',
-    termYears: '',
-    idMortgageLoan: '',
-  });
 
   const [responseMessage, setResponseMessage] = useState('');
 
@@ -48,13 +42,50 @@ function Solicitude() {
     4: "Recuerda: Plazo hasta 15 años, 4.5%-6.0% interés anual, 50% del valor de la propiedad.",
   };
 
-  // useEffect to store the user's RUT in localStorage
   useEffect(() => {
     const storedRut = localStorage.getItem('user');
     if (storedRut) {
       setRutUser(storedRut);
     }
   }, []);
+
+  const validateField = (key, value) => {
+    let error = '';
+    if (key === 'termYears') {
+      const maxTerms = { 1: 30, 2: 20, 3: 25, 4: 15 };
+      if (value > maxTerms[idMortgageLoan]) {
+        error = `El plazo no puede superar los ${maxTerms[idMortgageLoan]} años.`;
+      }
+    }
+
+    if (key === 'interestRate') {
+      const ranges = {
+        1: [2.5, 5.0],
+        2: [4.0, 6.0],
+        3: [5.0, 7.0],
+        4: [4.5, 6.0],
+      };
+      const [min, max] = ranges[idMortgageLoan] || [];
+      if (value < min || value > max) {
+        error = `La tasa de interés debe estar entre ${min}% y ${max}%.`;
+      }
+    }
+
+    if (key === 'amount') {
+      const maxPercentages = { 1: 0.8, 2: 0.7, 3: 0.6, 4: 0.5 };
+      if (value > propertyValue * (maxPercentages[idMortgageLoan] || 1)) {
+        error = `El monto no puede superar el ${maxPercentages[idMortgageLoan] * 100}% del valor de la propiedad.`;
+      }
+    }
+
+    setErrors((prevErrors) => ({ ...prevErrors, [key]: error }));
+  };
+
+  const handleChangeWithValidation = (setter, key) => (e) => {
+    const value = e.target.value;
+    setter(value);
+    validateField(key, value);
+  };
 
   const handleChange = (setter, key) => (e) => {
     setter(e.target.value);
@@ -66,6 +97,16 @@ function Solicitude() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Validar todos los campos antes de enviar
+    const fieldsToValidate = { termYears, interestRate, amount };
+    Object.entries(fieldsToValidate).forEach(([key, value]) =>
+      validateField(key, value)
+    );
+
+    if (Object.values(errors).some((error) => error)) {
+      setResponseMessage('Por favor, corrige los errores antes de enviar.');
+      return;
+    }
 
     const formData = new FormData();
     formData.append('rutUser', rutUser);
@@ -160,37 +201,10 @@ function Solicitude() {
           )}
         </FormControl>
         <TextField
-          label="Antigüedad laboral (años)"
-          type="number"
-          value={jobSeniority}
-          onChange={handleChange(setJobSeniority, "jobSeniority")}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
-          label="Monto de deudas"
-          type="number"
-          value={debtsAmount}
-          onChange={handleChange(setDebtsAmount, "debtsAmount")}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
-          label="Salario"
-          type="number"
-          value={salary}
-          onChange={handleChange(setSalary, "salary")}
-          fullWidth
-          margin="normal"
-          required
-        />
-        <TextField
           label="Valor de la propiedad"
           type="number"
           value={propertyValue}
-          onChange={handleChange(setPropertyValue, "propertyValue")}
+          onChange={(e) => setPropertyValue(e.target.value)}
           fullWidth
           margin="normal"
           required
@@ -199,25 +213,62 @@ function Solicitude() {
           label="Monto del préstamo"
           type="number"
           value={amount}
-          onChange={handleChange(setAmount, "amount")}
+          onChange={handleChangeWithValidation(setAmount, 'amount')}
+          error={!!errors.amount}
+          helperText={errors.amount}
           fullWidth
           margin="normal"
           required
         />
-        <TextField
-          label="Tasa de interés anual (%)"
-          type="number"
-          value={interestRate}
-          onChange={handleChange(setInterestRate, "interestRate")}
-          fullWidth
-          margin="normal"
-          required
-        />
+
         <TextField
           label="Plazo (años)"
           type="number"
           value={termYears}
-          onChange={handleChange(setTermYears, "termYears")}
+          onChange={handleChangeWithValidation(setTermYears, 'termYears')}
+          error={!!errors.termYears}
+          helperText={errors.termYears}
+          fullWidth
+          margin="normal"
+          required
+        />
+
+        <TextField
+          label="Tasa de interés anual (%)"
+          type="number"
+          value={interestRate}
+          onChange={handleChangeWithValidation(setInterestRate, 'interestRate')}
+          error={!!errors.interestRate}
+          helperText={errors.interestRate}
+          fullWidth
+          margin="normal"
+          required
+        />
+          <TextField
+          label="Salario mensual"
+          type="number"
+          value={salary}
+          onChange={(e) => setSalary(e.target.value)}
+          fullWidth
+          margin="normal"
+          required
+        />
+
+        <TextField
+          label="Años de antigüedad laboral"
+          type="number"
+          value={jobSeniority}
+          onChange={(e) => setJobSeniority(e.target.value)}
+          fullWidth
+          margin="normal"
+          required
+        />
+
+        <TextField
+          label="Monto de deudas"
+          type="number"
+          value={debtsAmount}
+          onChange={(e) => setDebtsAmount(e.target.value)}
           fullWidth
           margin="normal"
           required

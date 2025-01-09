@@ -7,7 +7,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import FormHelperText from '@mui/material/FormHelperText';
 import SendIcon from '@mui/icons-material/Send';
 
 const Simulator = () => {
@@ -32,6 +31,16 @@ const Simulator = () => {
         2: "Hasta 20 años, 4.0%-6.0% interés anual, 70% del valor de la propiedad.",
         3: "Hasta 25 años, 5.0%-7.0% interés anual, 60% del valor de la propiedad.",
         4: "Hasta 15 años, 4.5%-6.0% interés anual, 50% del valor de la propiedad.",
+    };
+
+    // Función para manejar cambios y evitar valores negativos
+    const handleChange = (setter) => (e) => {
+        const value = e.target.value;
+        if (value < 0) {
+            setter('');
+        } else {
+            setter(value);
+        }
     };
 
     const calculateMonthlyPayment = (event) => {
@@ -152,7 +161,7 @@ const Simulator = () => {
                     label="Valor de la propiedad"
                     type="number"
                     value={propertyValue}
-                    onChange={(e) => setPropertyValue(e.target.value)}
+                    onChange={handleChange(setPropertyValue)}
                     error={!!errors.propertyValue}
                     helperText={errors.propertyValue}
                     fullWidth
@@ -162,7 +171,7 @@ const Simulator = () => {
                     label="Monto del préstamo"
                     type="number"
                     value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
+                    onChange={handleChange(setAmount)}
                     error={!!errors.amount}
                     helperText={errors.amount}
                     fullWidth
@@ -172,7 +181,7 @@ const Simulator = () => {
                     label="Tasa de interés anual (%)"
                     type="number"
                     value={interestRate}
-                    onChange={(e) => setInterestRate(e.target.value)}
+                    onChange={handleChange(setInterestRate)}
                     error={!!errors.interestRate}
                     helperText={errors.interestRate}
                     fullWidth
@@ -182,7 +191,7 @@ const Simulator = () => {
                     label="Plazo (años)"
                     type="number"
                     value={termYears}
-                    onChange={(e) => setTermYears(e.target.value)}
+                    onChange={handleChange(setTermYears)}
                     error={!!errors.termYears}
                     helperText={errors.termYears}
                     fullWidth
