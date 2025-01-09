@@ -50,7 +50,7 @@ const Home = () => {
         <div>
           <p>Haz iniciado sesión. ¡Disfruta tu experiencia!</p>
           <button className='button-style' onClick={goToSolicitude}>Hacer una solicitud</button>
-          <button className='button-style' onClick={allSolicitudes}>Ver todas las solicitudes</button>
+          <button className='button-style' onClick={allSolicitudes}>Revisar solicitudes</button>
           <button className='button-style' onClick={goToSimulator}>Simular préstamo</button>
           <button className='button-style' onClick={goToListSolicitudes}>Mis solicitudes</button>
           <button className='button-style' onClick={handleLogout}>Salir</button>

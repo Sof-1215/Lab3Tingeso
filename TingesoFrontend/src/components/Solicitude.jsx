@@ -330,7 +330,14 @@ function Solicitude() {
       </form>
 
       {responseMessage && (
-        <Typography variant="h4" color="1a40b8" sx={{ color: "#59b526" , marginTop: 2 }}>
+        <Typography variant="h4" color="1a40b8" sx={{
+          color:
+            responseMessage === 'Por favor, corrige los errores antes de enviar.' ||
+            responseMessage === 'Error al subir archivos.'
+              ? '#ff0000'
+              : '#59b526',
+          marginTop: 2,
+        }}>
           {responseMessage}
         </Typography>
       )}

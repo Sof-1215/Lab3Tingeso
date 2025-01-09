@@ -27,10 +27,10 @@ const Simulator = () => {
 
     // Define mensajes de condiciones
     const conditions = {
-        1: "Hasta 30 años, 2.5%-5.0% interés anual, 80% del valor de la propiedad.",
-        2: "Hasta 20 años, 4.0%-6.0% interés anual, 70% del valor de la propiedad.",
-        3: "Hasta 25 años, 5.0%-7.0% interés anual, 60% del valor de la propiedad.",
-        4: "Hasta 15 años, 4.5%-6.0% interés anual, 50% del valor de la propiedad.",
+        1: "Recuerda: Plazo hasta 30 años, 2.5%-5.0% interés anual, 80% del valor de la propiedad.",
+        2: "Recuerda: Plazo hasta 20 años, 4.0%-6.0% interés anual, 70% del valor de la propiedad.",
+        3: "Recuerda: Plazo hasta 25 años, 5.0%-7.0% interés anual, 60% del valor de la propiedad.",
+        4: "Recuerda: Plazo hasta 15 años, 4.5%-6.0% interés anual, 50% del valor de la propiedad.",
     };
 
     // Función para manejar cambios y evitar valores negativos
@@ -210,7 +210,7 @@ const Simulator = () => {
 
             {monthlyPayment !== null && (
                 <Box marginTop="20px" textAlign="center">
-                    <Typography variant="h4" color="59b526">
+                    <Typography variant="h4" color="#59b526">
                         Cuota mensual: ${monthlyPayment.toFixed(0)}
                     </Typography>
                 </Box>
