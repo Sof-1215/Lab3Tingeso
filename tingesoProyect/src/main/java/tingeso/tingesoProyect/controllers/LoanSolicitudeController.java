@@ -124,8 +124,9 @@ public class LoanSolicitudeController {
         System.out.println("Deudas: " + debts);
 
         // Devuelve una respuesta adecuada
-        String responseMessage = String.format("Evaluación completada: Cuota ingreso = %.2f%%, Deuda ingreso = %.2f%%, Edad = %d, Antigüedad laboral = %d años, Deudas = %d",
+        String responseMessage = String.format("Evaluación completada:\nCuota ingreso = %.2f%%\nDeuda ingreso = %.2f%%\nEdad = %d\nAntigüedad laboral = %d años\nDeudas = %d",
                 cuotaIngreso, deudaIngreso, age, jobSeniority, debts);
+
         return ResponseEntity.ok(responseMessage);
     }
 }

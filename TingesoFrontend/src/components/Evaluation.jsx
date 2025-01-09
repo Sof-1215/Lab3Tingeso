@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { TextField, Button, Paper, Grid } from "@mui/material";
+import { TextField, Button, Paper, Grid, Typography } from "@mui/material";
 import loanSolicitudeService from "../services/loansolicitude.service";
 import axios from "axios";
 
@@ -51,6 +51,7 @@ const EditSolicitude = () => {
     transactionHistory: null,
   });
   const [error, setError] = useState(null);
+  const [evaluationMessage, setEvaluationMessage] = useState(""); // Estado para mensaje de evaluación
 
   useEffect(() => {
     const fetchSolicitude = async () => {
@@ -97,10 +98,10 @@ const EditSolicitude = () => {
       const response = await axios.post(
         `http://localhost:8090/api/v1/loansolicitude/evaluation/${solicitudeData.id}`
       );
-      alert(response.data); // Muestra el mensaje de la evaluación
+      setEvaluationMessage(response.data); // Actualizar el mensaje de evaluación
     } catch (error) {
       console.error("Error al evaluar la solicitud:", error);
-      alert("Hubo un error al realizar la evaluación.");
+      setEvaluationMessage("Hubo un error al realizar la evaluación."); // En caso de error
     }
   };
 
@@ -160,6 +161,15 @@ const EditSolicitude = () => {
               Evaluar
             </Button>
           </Grid>
+
+          {evaluationMessage && (
+            <Grid item xs={12} style={{ marginTop: "20px" }}>
+              <Typography variant="h5">
+                <pre>{evaluationMessage}</pre>
+              </Typography>
+            </Grid>
+          )}
+
         </Grid>
       </form>
     </Paper>
@@ -167,4 +177,3 @@ const EditSolicitude = () => {
 };
 
 export default EditSolicitude;
-
