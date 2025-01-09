@@ -52,6 +52,7 @@ const EditSolicitude = () => {
   });
   const [error, setError] = useState(null);
   const [evaluationMessage, setEvaluationMessage] = useState(""); // Estado para mensaje de evaluación
+  const [fileMessages, setFileMessages] = useState({}); // Estado para mensajes por archivo
 
   useEffect(() => {
     const fetchSolicitude = async () => {
@@ -85,11 +86,18 @@ const EditSolicitude = () => {
     setSolicitudeData((prev) => ({ ...prev, [name]: value || "" }));
   };
 
-  const handleDownload = (fileData, fileName) => {
+  const handleDownload = (fileData, fileName, fieldName) => {
     if (!fileData) {
-      alert("El archivo no está disponible para descargar.");
+      setFileMessages((prevMessages) => ({
+        ...prevMessages,
+        [fieldName]: "El archivo no está disponible para descargar.",
+      }));
       return;
     }
+    setFileMessages((prevMessages) => ({
+      ...prevMessages,
+      [fieldName]: "", // Limpiar cualquier mensaje anterior
+    }));
     downloadFile(fileData, fileName);
   };
 
@@ -139,17 +147,23 @@ const EditSolicitude = () => {
             />
           </Grid>
 
-          <Grid item xs={12}>
-            {solicitudeData.dicomHistory && (
-              <Button
-                variant="contained"
-                sx={{ backgroundColor: "#2d53ff" }}
-                onClick={() => handleDownload(solicitudeData.dicomHistory, "dicomHistory.pdf")}
-              >
-                Descargar Historial crediticio
-              </Button>
-            )}
-          </Grid>
+          {["dicomHistory", "transactionHistory", "proofOfIncome", "appraisalCertificate", "houseDeed", "businessFinancialStatus", "businessPlan", "remodelBudget"].map((field, index) => (
+            <Grid item xs={12} key={index}>
+              {solicitudeData[field] ? (
+                <Button
+                  variant="contained"
+                  sx={{ backgroundColor: "#2d53ff" }}
+                  onClick={() => handleDownload(solicitudeData[field], `${field}.pdf`, field)}
+                >
+                  Descargar {field.replace(/([A-Z])/g, " $1").toUpperCase()}
+                </Button>
+              ) : (
+                <Typography variant="body2" color="error">
+                  {fileMessages[field] || `El archivo ${field.replace(/([A-Z])/g, " $1").toUpperCase()} no está disponible.`}
+                </Typography>
+              )}
+            </Grid>
+          ))}
 
           <Grid item xs={12}>
             <Button
@@ -169,7 +183,47 @@ const EditSolicitude = () => {
               </Typography>
             </Grid>
           )}
+        </Grid>
+      </form>
 
+      {/* Botones de aprobación */}
+      <form>
+        <Grid item xs={12}>
+          <Button
+            type="button"
+            variant="contained"
+            sx={{ backgroundColor: "#59b526", marginTop: 2 }}
+            onClick={handleEvaluate}
+          >
+            Aprobar
+          </Button>
+        </Grid>
+      </form>
+
+      {/* Botones de estado */}
+      <form>
+        <Grid item xs={12}>
+          <Button
+            type="button"
+            variant="contained"
+            sx={{ backgroundColor: "#c4a617", marginTop: 2 }}
+            onClick={handleEvaluate}
+          >
+            Pendiente
+          </Button>
+        </Grid>
+      </form>
+
+      <form>
+        <Grid item xs={12}>
+          <Button
+            type="button"
+            variant="contained"
+            sx={{ backgroundColor: "#aa3141", marginTop: 2 }}
+            onClick={handleEvaluate}
+          >
+            Rechazar
+          </Button>
         </Grid>
       </form>
     </Paper>
@@ -177,3 +231,4 @@ const EditSolicitude = () => {
 };
 
 export default EditSolicitude;
+
